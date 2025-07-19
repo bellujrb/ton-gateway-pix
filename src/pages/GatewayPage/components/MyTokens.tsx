@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Wallet, TrendingUp, Calendar } from 'lucide-react';
+import { useTonTokenBalances } from '../../../hooks/useTonTokenBalances';
 
 interface Token {
   id: string;
@@ -12,9 +13,16 @@ interface Token {
 
 interface MyTokensProps {
   tokens: Token[];
+  walletAddress: string | null;
 }
 
-export const MyTokens: React.FC<MyTokensProps> = ({ tokens }) => {
+export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => {
+  const tokenList = [
+    { symbol: 'TON', address: null },
+    { symbol: 'HYPE', address: 'UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ' },
+    // Adicione outros tokens se necessário
+  ];
+  const balances = useTonTokenBalances(walletAddress, tokenList);
   const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
   const totalTokens = tokens.reduce((sum, token) => sum + token.amount, 0);
 
@@ -110,24 +118,19 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens }) => {
         </div>
 
         {/* Token Distribution */}
-        {tokens.length > 0 && (
+        {tokenList.length > 0 && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Distribuição por Token</h2>
             <div className="space-y-3">
-              {Object.entries(
-                tokens.reduce((acc, token) => {
-                  acc[token.symbol] = (acc[token.symbol] || 0) + token.amount;
-                  return acc;
-                }, {} as Record<string, number>)
-              ).map(([symbol, amount]) => (
-                <div key={symbol} className="flex items-center justify-between">
+              {tokenList.map(token => (
+                <div key={token.symbol} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-xs font-bold text-blue-600">{symbol}</span>
+                      <span className="text-xs font-bold text-blue-600">{token.symbol}</span>
                     </div>
-                    <span className="font-medium text-gray-800">{symbol}</span>
+                    <span className="font-medium text-gray-800">{token.symbol}</span>
                   </div>
-                  <span className="font-semibold text-gray-800">{amount.toFixed(2)}</span>
+                  <span className="font-semibold text-gray-800">{balances[token.symbol]?.toFixed(4) ?? '0.0000'}</span>
                 </div>
               ))}
             </div>

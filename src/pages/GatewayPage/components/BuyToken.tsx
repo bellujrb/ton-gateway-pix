@@ -9,7 +9,13 @@ interface BuyTokenProps {
 }
 
 const availableTokens = [
-  { name: 'Toncoin', symbol: 'TON', description: 'Token nativo da rede TON' },
+  {
+    "name": "Toncoin",
+    "symbol": "TON",
+    "description": "Token nativo da rede TON",
+    "address": null,
+    "explorer": "https://tonscan.org"
+  },  
   {
     name: 'HYPE',
     symbol: 'HYPE',
