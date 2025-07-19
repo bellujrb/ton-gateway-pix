@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { QrCode, Clock, CheckCircle2, ArrowLeft, Info, Wallet, ExternalLink } from 'lucide-react';
 import { QRCodeDisplay } from './QRCodeDisplay';
+import { useTokens } from '../../../context/TokensContext';
 
 interface BuyTokenProps {
   onTokenPurchased: (token: { name: string; symbol: string; amount: number; price: number }) => void;
@@ -31,33 +32,37 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
   const [showQRCode, setShowQRCode] = useState(false);
   const [isWaitingPayment, setIsWaitingPayment] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const { buyToken } = useTokens();
 
   const handleGenerateQR = () => {
     if (amount && selectedToken && wallet) {
       setShowQRCode(true);
       setIsWaitingPayment(true);
       
-      // Simulate payment confirmation after 10 seconds
       setTimeout(() => {
         setIsWaitingPayment(false);
         setIsCompleted(true);
         
         const token = availableTokens.find(t => t.symbol === selectedToken);
         if (token) {
-          const tokenAmount = Math.random() * 1000; // Simulate token amount
+          const tokenAmount = Math.random() * 1000; 
           onTokenPurchased({
             name: token.name,
             symbol: token.symbol,
             amount: tokenAmount,
             price: parseFloat(amount)
           });
+
+          if (token.symbol === 'TON' || token.symbol === 'HYPE') {
+            buyToken(token.symbol, tokenAmount, parseFloat(amount));
+          }
         }
         
         setTimeout(() => {
           setShowQRCode(false);
           setIsCompleted(false);
           setAmount('');
-          setSelectedToken('');
+          setSelectedToken('TON');
           onNavigate('home');
         }, 3000);
       }, 10000);

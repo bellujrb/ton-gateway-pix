@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowLeft, Wallet, Copy, Shield, Settings, HelpCircle, ExternalLink } from 'lucide-react';
 import { TonConnectButton } from '@tonconnect/ui-react';
+import { useTokens } from '../../../context/TokensContext';
 
 interface ProfileProps {
   wallet: any;
@@ -8,6 +9,7 @@ interface ProfileProps {
 
 export const Profile: React.FC<ProfileProps> = ({ wallet }) => {
   const [copied, setCopied] = React.useState(false);
+  const { balances } = useTokens();
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -69,6 +71,17 @@ export const Profile: React.FC<ProfileProps> = ({ wallet }) => {
                 {copied && (
                   <p className="text-sm text-green-600 mt-2">Endereço copiado!</p>
                 )}
+              </div>
+              {/* Saldos mock globais */}
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Saldo TON (mock)</label>
+                  <p className="font-medium text-gray-800">{balances.TON?.toFixed(4) ?? '0.0000'}</p>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Saldo HYPE (mock)</label>
+                  <p className="font-medium text-gray-800">{balances.HYPE?.toFixed(4) ?? '0.0000'}</p>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
