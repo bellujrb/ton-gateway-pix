@@ -42,7 +42,7 @@ Já solicitamos o token à equipe responsável e estamos aguardando sua emissão
 
 ### 🔁 End-to-End DApp Fluxograma
 
-![DApp Flowchart](https://github.com/user-attachments/assets/702c19d9-dc39-4f37-90fd-d43de226ca42)
+![DApp Flowchart](https://github.com/user-attachments/assets/86c3975d-454c-4b10-8918-ff02b2f3841a)
 
 ---
 
