@@ -92,7 +92,9 @@ export const Profile: React.FC<ProfileProps> = ({ wallet }) => {
             <p className="text-gray-600 mb-4">
               Conecte sua wallet para ver as informações do perfil
             </p>
-            <TonConnectButton className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors" />
+            <div className="connect-wallet-container">
+              <TonConnectButton className="connect-wallet-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors" />
+            </div>
           </div>
         )}
 
@@ -164,17 +166,19 @@ export const Profile: React.FC<ProfileProps> = ({ wallet }) => {
 
         {/* Disconnect Wallet */}
         {wallet && (
-          <div className="bg-red-50 rounded-2xl p-4 border border-red-200">
-            <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                <Wallet className="w-4 h-4 text-red-600" />
+          <div className="disconnect-wallet-container rounded-3xl p-6 mx-4 sm:mx-0">
+            <div className="flex items-start space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center shadow-sm flex-shrink-0">
+                <Wallet className="w-6 h-6 text-red-600" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-red-800">Desconectar Wallet</p>
-                <p className="text-xs text-red-600 mt-1">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-red-800 mb-2">Desconectar Wallet</h3>
+                <p className="text-sm text-red-700 mb-4 leading-relaxed">
                   Clique no botão abaixo para desconectar sua wallet atual
                 </p>
-                <TonConnectButton className="mt-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm" />
+                <div className="relative">
+                  <TonConnectButton className="disconnect-wallet-btn w-full text-white font-semibold py-4 px-6 rounded-2xl text-base" />
+                </div>
               </div>
             </div>
           </div>

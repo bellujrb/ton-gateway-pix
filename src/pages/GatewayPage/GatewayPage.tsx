@@ -156,7 +156,9 @@ const Onboarding: React.FC<OnboardingProps> = ({ onConnectWallet: _ }) => {
           </p>
         </div>
 
-        <TonConnectButton className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 transform active:scale-95" />
+        <div className="connect-wallet-container">
+          <TonConnectButton className="connect-wallet-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 transform active:scale-95" />
+        </div>
 
         <p className="text-xs text-gray-500 text-center">
           Conecte sua wallet para começar a comprar tokens TON

@@ -82,3 +82,45 @@
   --ton-dark-gray: #2D2D2D;
   --ton-success: #4CAF50;
 }
+
+/* Custom disconnect wallet button styles */
+.disconnect-wallet-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: 2px solid #f87171;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  transition: all 0.2s ease;
+}
+
+.disconnect-wallet-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+.disconnect-wallet-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Disconnect wallet container styles */
+.disconnect-wallet-container {
+  background: linear-gradient(135deg, #fef2f2 0%, #fdf2f8 100%);
+  border: 2px solid #fecaca;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Connect wallet button centering styles */
+.connect-wallet-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.connect-wallet-btn {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
