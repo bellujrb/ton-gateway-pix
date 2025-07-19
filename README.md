@@ -4,9 +4,11 @@
 ![Platform](https://img.shields.io/badge/Platform-Web-blue)
 ![Blockchain](https://img.shields.io/badge/Blockchain-Ton-blue)
 
+[Inicie o MiniApp no Telegram](https://t.me/TonGatewayPayBot/mini)
+
 ---
 
-### 🌐 Introduction
+### 🌐 Introdução
 
 Capacitar milhões de brasileiros a acessar o mundo das criptomoedas por meio da simplicidade do PIX — tornando a TON a rede blockchain mais acessível da América Latina para pagamentos, investimentos e inovação financeira descentralizada.
 
@@ -38,30 +40,30 @@ Já solicitamos o token à equipe responsável e estamos aguardando sua emissão
 
 ---
 
-### 🔁 End-to-End DApp Flowchart
+### 🔁 End-to-End DApp Fluxograma
 
 ![DApp Flowchart](https://github.com/user-attachments/assets/702c19d9-dc39-4f37-90fd-d43de226ca42)
 
 ---
 
-## 🛠 Installation (Front-end)
+## 🛠 Instalação (Front-end)
 
-1. **Pre-requisites**
-    - Make sure you have NodeJS installed on your machine.
+1. **Pre-requisitos**
+    - Certifique de ter NodeJS instalado na sua maquina.
 
-2. **Clone the Repository**
+2. **Clone o Repositorio**
 
     ```bash
     git clone https://github.com/bellujrb/ton-gateway-pix
     ```
 
-3. **Install Dependencies**
+3. **Instale as dependências**
 
     ```bash
     npm install
     ```
 
-4. **Run the App**
+4. **Inicie o App**
 
     ```bash
     npm run dev
@@ -69,7 +71,7 @@ Já solicitamos o token à equipe responsável e estamos aguardando sua emissão
 
 ---
 
-## 📂 Project File Tree
+## 📂 Arvore do Projeto
     
 ```
 ton-gateway-pay
