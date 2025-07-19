@@ -25,26 +25,6 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
   const [showQRCode, setShowQRCode] = useState(false);
   const [isWaitingPayment, setIsWaitingPayment] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [tonBalance, setTonBalance] = useState<string | null>(null);
-
-  // Buscar saldo TON ao conectar wallet ou trocar de wallet
-  React.useEffect(() => {
-    async function fetchTonBalance(address: string) {
-      try {
-        const res = await fetch(`https://tonapi.io/v1/account/getInfo?account=${address}`);
-        const data = await res.json();
-        const balance = Number(data.balance) / 1e9;
-        setTonBalance(balance.toFixed(3));
-      } catch (e) {
-        setTonBalance(null);
-      }
-    }
-    if (wallet && wallet.account?.address && selectedToken === 'TON') {
-      fetchTonBalance(wallet.account.address);
-    } else {
-      setTonBalance(null);
-    }
-  }, [wallet, selectedToken]);
 
   const handleGenerateQR = () => {
     if (amount && selectedToken && wallet) {
@@ -126,9 +106,6 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
                 <p className="text-sm font-medium text-blue-800">Wallet Conectada</p>
                 <p className="text-xs text-blue-600 mt-1">
                   {wallet.account.address.slice(0, 8)}...{wallet.account.address.slice(-8)}
-                  {selectedToken === 'TON' && tonBalance !== null && (
-                    <span className="ml-2 text-green-700 font-semibold">• {tonBalance} TON</span>
-                  )}
                 </p>
               </div>
             </div>
@@ -198,7 +175,21 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-gray-800">{token.name}</p>
+                      <div className="flex items-center space-x-2">
+                        <p className="font-semibold text-gray-800">{token.name}</p>
+                        {token.explorer && (
+                          <a
+                            href={token.explorer}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block text-blue-500 hover:underline"
+                            title="Ver no Explorer"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="inline w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7" /></svg>
+                          </a>
+                        )}
+                      </div>
                       <p className="text-sm text-gray-600">{token.description}</p>
                     </div>
                     <div className="text-right">
