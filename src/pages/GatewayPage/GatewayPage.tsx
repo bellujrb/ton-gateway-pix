@@ -62,7 +62,7 @@ export const GatewayPage: React.FC = () => {
           />
         );
       case 'tokens':
-        return <MyTokens tokens={tokens} />;
+        return <MyTokens tokens={tokens} walletAddress={wallet?.account?.address || null} />;
       case 'profile':
         return <Profile wallet={wallet} />;
       default:
