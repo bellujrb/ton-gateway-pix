@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ArrowLeft, Wallet, TrendingUp, Calendar } from 'lucide-react';
 import { useTonTokenBalances } from '../../../hooks/useTonTokenBalances';
 
@@ -17,11 +17,11 @@ interface MyTokensProps {
 }
 
 export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => {
-  const tokenList = [
+  const tokenList = useMemo(() => [
     { symbol: 'TON', address: null },
     { symbol: 'HYPE', address: 'UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ' },
     // Adicione outros tokens se necessário
-  ];
+  ], []);
   const balances = useTonTokenBalances(walletAddress, tokenList);
   const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
   const totalTokens = tokens.reduce((sum, token) => sum + token.amount, 0);
