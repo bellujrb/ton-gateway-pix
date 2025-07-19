@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { fetchTonBalance, fetchJettonBalances } from '../helpers/tonApi';
 
 export function useTonTokenBalances(address: string | null, tokens: { symbol: string, address: string | null }[]) {
-  const [balances, setBalances] = useState<{ [symbol: string]: number }>({});
+  const [balances, setBalances] = useState<{ [symbol: string]: number } | null>(null);
 
   useEffect(() => {
     if (!address) return;
-
+    let isMounted = true;
     async function fetchBalances() {
       const result: { [symbol: string]: number } = {};
       // TON nativo
@@ -22,10 +22,10 @@ export function useTonTokenBalances(address: string | null, tokens: { symbol: st
           result[token.symbol] = jettonBalances[token.address!] || 0;
         }
       }
-      setBalances(result);
+      if (isMounted) setBalances(result);
     }
-
     fetchBalances();
+    return () => { isMounted = false; };
   }, [address, tokens]);
 
   return balances;

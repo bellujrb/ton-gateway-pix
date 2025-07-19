@@ -130,7 +130,11 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
                     </div>
                     <span className="font-medium text-gray-800">{token.symbol}</span>
                   </div>
-                  <span className="font-semibold text-gray-800">{balances[token.symbol]?.toFixed(4) ?? '0.0000'}</span>
+                  <span className="font-semibold text-gray-800">
+                    {balances === null
+                      ? '...'
+                      : (balances[token.symbol]?.toFixed(4) ?? '0.0000')}
+                  </span>
                 </div>
               ))}
             </div>
