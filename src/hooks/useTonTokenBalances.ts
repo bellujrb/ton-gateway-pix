@@ -7,6 +7,8 @@ export function useTonTokenBalances(address: string | null, tokens: { symbol: st
   useEffect(() => {
     if (!address) return;
     let isMounted = true;
+    let interval: ReturnType<typeof setInterval>;
+
     async function fetchBalances() {
       const result: { [symbol: string]: number } = {};
       // TON nativo
@@ -24,8 +26,14 @@ export function useTonTokenBalances(address: string | null, tokens: { symbol: st
       }
       if (isMounted) setBalances(result);
     }
+
     fetchBalances();
-    return () => { isMounted = false; };
+    interval = setInterval(fetchBalances, 5000); // Atualiza a cada 30s
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [address, tokens]);
 
   return balances;
