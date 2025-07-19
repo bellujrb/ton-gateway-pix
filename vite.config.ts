@@ -27,6 +27,15 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          telegram: ['@telegram-apps/sdk-react', '@telegram-apps/telegram-ui'],
+          tonconnect: ['@tonconnect/ui-react'],
+        },
+      },
+    },
   },
   publicDir: './public',
   server: {
