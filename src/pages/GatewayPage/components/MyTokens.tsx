@@ -19,7 +19,7 @@ interface MyTokensProps {
 export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => {
   const tokenList = useMemo(() => [
     { symbol: 'TON', address: null },
-    { symbol: 'HYPE', address: 'UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ' },
+    { symbol: 'HYPE', address: '0:52312df266a2be2948611954e4b50a80fc2b96b1e11127a33b024b0d61a8dfa8' },
     // Adicione outros tokens se necessário
   ], []);
   const balances = useTonTokenBalances(walletAddress, tokenList);

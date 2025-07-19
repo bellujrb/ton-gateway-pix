@@ -6,6 +6,8 @@ import { BuyToken } from './components/BuyToken';
 import { MyTokens } from './components/MyTokens';
 import { Profile } from './components/Profile';
 import { BottomNavigation } from './components/BottomNavigation';
+import { useTonTokenBalances } from '../../hooks/useTonTokenBalances';
+import { useMemo } from 'react';
 
 type Screen = 'onboarding' | 'home' | 'buy' | 'tokens' | 'profile';
 
@@ -178,6 +180,11 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
   const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
   const recentTokens = tokens.slice(0, 3);
+  const walletAddress = wallet?.account?.address || null;
+  const tokenList = useMemo(() => [
+    { symbol: 'TON', address: null }
+  ], []);
+  const balances = useTonTokenBalances(walletAddress, tokenList);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -211,6 +218,12 @@ const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
               <p className="text-sm font-mono text-gray-800 break-all">
                 {wallet.account.address.slice(0, 8)}...{wallet.account.address.slice(-8)}
               </p>
+              <div className="mt-2 flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Saldo TON:</span>
+                <span className="font-bold text-blue-600 text-lg">
+                  {balances === null ? '...' : (balances['TON']?.toFixed(4) ?? '0.0000')}
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -223,6 +236,10 @@ const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
           </div>
           <div className="space-y-2">
             <p className="text-2xl font-bold">R$ {totalValue.toFixed(2)}</p>
+            <p className="text-white text-sm flex items-center space-x-2">
+              <span>Total TON:</span>
+              <span className="font-bold">{balances === null ? '...' : (balances['TON']?.toFixed(4) ?? '0.0000')}</span>
+            </p>
             <p className="text-blue-100 text-sm">
               {tokens.length} {tokens.length === 1 ? 'token' : 'tokens'} comprados
             </p>
