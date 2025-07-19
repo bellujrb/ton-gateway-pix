@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QrCode, Clock, CheckCircle2, ArrowLeft, Info, Wallet } from 'lucide-react';
+import { QrCode, Clock, CheckCircle2, ArrowLeft, Info, Wallet, ExternalLink } from 'lucide-react';
 import { QRCodeDisplay } from './QRCodeDisplay';
 
 interface BuyTokenProps {
@@ -102,11 +102,15 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
               <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                 <Wallet className="w-4 h-4 text-blue-600" />
               </div>
-              <div>
-                <p className="text-sm font-medium text-blue-800">Wallet Conectada</p>
-                <p className="text-xs text-blue-600 mt-1">
-                  {wallet.account.address.slice(0, 8)}...{wallet.account.address.slice(-8)}
-                </p>
+              <div className="flex items-center space-x-2">
+                <p className="text-sm font-medium text-blue-800 mb-0">Wallet Conectada</p>
+                <button
+                  onClick={() => window.open(`https://tonviewer.com/${wallet.account.address}`, '_blank')}
+                  className="ml-1 p-1 rounded-full hover:bg-blue-200 transition-colors"
+                  title="Ver no Explorer"
+                >
+                  <ExternalLink className="w-4 h-4 text-blue-600" />
+                </button>
               </div>
             </div>
           </div>
@@ -175,21 +179,7 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-center space-x-2">
-                        <p className="font-semibold text-gray-800">{token.name}</p>
-                        {token.explorer && (
-                          <a
-                            href={token.explorer}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block text-blue-500 hover:underline"
-                            title="Ver no Explorer"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="inline w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7" /></svg>
-                          </a>
-                        )}
-                      </div>
+                      <p className="font-semibold text-gray-800">{token.name}</p>
                       <p className="text-sm text-gray-600">{token.description}</p>
                     </div>
                     <div className="text-right">
