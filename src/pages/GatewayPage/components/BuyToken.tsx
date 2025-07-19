@@ -10,17 +10,41 @@ interface BuyTokenProps {
 
 const availableTokens = [
   { name: 'Toncoin', symbol: 'TON', description: 'Token nativo da rede TON' },
-  { name: 'Notcoin', symbol: 'NOT', description: 'Token de jogo popular' },
-  { name: 'Dogs', symbol: 'DOGS', description: 'Meme token da comunidade' },
-  { name: 'Hamster', symbol: 'HMSTR', description: 'Token do jogo Hamster Kombat' },
+  {
+    name: 'HYPE',
+    symbol: 'HYPE',
+    description: 'Token HYPE (https://tonviewer.com/UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ)',
+    address: 'UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ',
+    explorer: 'https://tonviewer.com/UQDBIhmZ3uuX9MzFJmmShZMiLOkwGNk_tsRU_O3yUW-VbOtQ'
+  },
 ];
 
 export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate, wallet }) => {
   const [amount, setAmount] = useState('');
-  const [selectedToken, setSelectedToken] = useState('');
+  const [selectedToken, setSelectedToken] = useState('TON');
   const [showQRCode, setShowQRCode] = useState(false);
   const [isWaitingPayment, setIsWaitingPayment] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [tonBalance, setTonBalance] = useState<string | null>(null);
+
+  // Buscar saldo TON ao conectar wallet ou trocar de wallet
+  React.useEffect(() => {
+    async function fetchTonBalance(address: string) {
+      try {
+        const res = await fetch(`https://tonapi.io/v1/account/getInfo?account=${address}`);
+        const data = await res.json();
+        const balance = Number(data.balance) / 1e9;
+        setTonBalance(balance.toFixed(3));
+      } catch (e) {
+        setTonBalance(null);
+      }
+    }
+    if (wallet && wallet.account?.address && selectedToken === 'TON') {
+      fetchTonBalance(wallet.account.address);
+    } else {
+      setTonBalance(null);
+    }
+  }, [wallet, selectedToken]);
 
   const handleGenerateQR = () => {
     if (amount && selectedToken && wallet) {
@@ -102,6 +126,9 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
                 <p className="text-sm font-medium text-blue-800">Wallet Conectada</p>
                 <p className="text-xs text-blue-600 mt-1">
                   {wallet.account.address.slice(0, 8)}...{wallet.account.address.slice(-8)}
+                  {selectedToken === 'TON' && tonBalance !== null && (
+                    <span className="ml-2 text-green-700 font-semibold">• {tonBalance} TON</span>
+                  )}
                 </p>
               </div>
             </div>
