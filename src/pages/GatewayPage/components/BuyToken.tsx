@@ -179,8 +179,22 @@ export const BuyToken: React.FC<BuyTokenProps> = ({ onTokenPurchased, onNavigate
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-gray-800">{token.name}</p>
-                      <p className="text-sm text-gray-600">{token.description}</p>
+                      <div className="flex items-center space-x-2">
+                        <p className="font-semibold text-gray-800 mb-0">{token.name}</p>
+                        {token.explorer && (
+                          <a
+                            href={token.explorer}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1 rounded-full hover:bg-blue-100"
+                            onClick={e => e.stopPropagation()}
+                            title="Ver no Explorer"
+                          >
+                            <ExternalLink className="w-4 h-4 text-blue-600" />
+                          </a>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600">{token.description.replace(/\(.*\)/, '').trim()}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-bold text-blue-600">{token.symbol}</p>
