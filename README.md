@@ -120,13 +120,13 @@ ton-gateway-pay
 #### `ton-gateway-pix`
 
 - `back-end`
-    - Back-end Application
+    - Back-end 
 - `src`
-    - Frontend Application
+    - Frontend 
 - `blockchain`
-    - Blockchain Application
+    - Blockchain 
 - `README.md`
-    - Documentation Project
+    - Documentação
  
 ---
 
