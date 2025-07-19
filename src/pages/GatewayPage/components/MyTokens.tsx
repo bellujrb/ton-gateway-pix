@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import { ArrowLeft, Wallet, TrendingUp, Calendar } from 'lucide-react';
+import { ArrowLeft, Wallet, Calendar } from 'lucide-react';
 import { useTonTokenBalances } from '../../../hooks/useTonTokenBalances';
-import { useTonTokenPrices } from '../../../hooks/useTonTokenPrices';
 
 interface Token {
   id: string;
@@ -24,16 +23,6 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
     // Adicione outros tokens se necessário
   ], []);
   const balances = useTonTokenBalances(walletAddress, tokenList);
-  const prices = useTonTokenPrices(tokenList.map(t => t.address === null ? 'ton' : t.address));
-  const totalBRL = useMemo(() => {
-    if (!balances || !prices) return 0;
-    return tokenList.reduce((sum, token) => {
-      const amount = balances[token.symbol] || 0;
-      const price = prices[token.address === null ? 'ton' : token.address]?.BRL || 0;
-      return sum + amount * price;
-    }, 0);
-  }, [balances, prices, tokenList]);
-  const totalTokens = tokens.reduce((sum, token) => sum + token.amount, 0);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -53,32 +42,30 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
       </div>
 
       <div className="p-6 space-y-6">
-        {/* Summary Cards */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Total Investido</p>
-                <p className="text-lg font-bold text-gray-800">R$ {totalBRL.toFixed(2)}</p>
-              </div>
-            </div>
-          </div>
 
+        {/* Token Distribution */}
+        {tokenList.length > 0 && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Tokens</p>
-                <p className="text-lg font-bold text-gray-800">{totalTokens.toFixed(2)}</p>
-              </div>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Tokens</h2>
+            <div className="space-y-3">
+              {tokenList.map(token => (
+                <div key={token.symbol} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-blue-600">{token.symbol}</span>
+                    </div>
+                    <span className="font-medium text-gray-800">{token.symbol}</span>
+                  </div>
+                  <span className="font-semibold text-gray-800">
+                    {balances === null
+                      ? '...'
+                      : (balances[token.symbol]?.toFixed(4) ?? '0.0000')}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
 
         {/* Transactions List */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
@@ -125,30 +112,6 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
             </div>
           )}
         </div>
-
-        {/* Token Distribution */}
-        {tokenList.length > 0 && (
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Distribuição por Token</h2>
-            <div className="space-y-3">
-              {tokenList.map(token => (
-                <div key={token.symbol} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-xs font-bold text-blue-600">{token.symbol}</span>
-                    </div>
-                    <span className="font-medium text-gray-800">{token.symbol}</span>
-                  </div>
-                  <span className="font-semibold text-gray-800">
-                    {balances === null
-                      ? '...'
-                      : (balances[token.symbol]?.toFixed(4) ?? '0.0000')}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Info Card */}
         <div className="bg-blue-50 rounded-2xl p-4 border border-blue-200">

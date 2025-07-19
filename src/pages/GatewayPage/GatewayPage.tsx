@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTonWallet } from '@tonconnect/ui-react';
 import { TonConnectButton } from '@tonconnect/ui-react';
-import { Wallet, Shield, Zap, DollarSign, ArrowRight } from 'lucide-react';
+import { Wallet, Shield, Zap, DollarSign } from 'lucide-react';
 import { BuyToken } from './components/BuyToken';
 import { MyTokens } from './components/MyTokens';
 import { Profile } from './components/Profile';
@@ -178,7 +178,6 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
-  const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
   const recentTokens = tokens.slice(0, 3);
   const walletAddress = wallet?.account?.address || null;
   const tokenList = useMemo(() => [
@@ -227,24 +226,6 @@ const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
             </div>
           </div>
         )}
-
-        {/* Portfolio Summary */}
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Portfolio</h2>
-            <ArrowRight className="w-5 h-5" />
-          </div>
-          <div className="space-y-2">
-            <p className="text-2xl font-bold">R$ {totalValue.toFixed(2)}</p>
-            <p className="text-white text-sm flex items-center space-x-2">
-              <span>Total TON:</span>
-              <span className="font-bold">{balances === null ? '...' : (balances['TON']?.toFixed(4) ?? '0.0000')}</span>
-            </p>
-            <p className="text-blue-100 text-sm">
-              {tokens.length} {tokens.length === 1 ? 'token' : 'tokens'} comprados
-            </p>
-          </div>
-        </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-4">
