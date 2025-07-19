@@ -218,7 +218,7 @@ const Home: React.FC<HomeProps> = ({ onNavigate, tokens, wallet }) => {
                 {wallet.account.address.slice(0, 8)}...{wallet.account.address.slice(-8)}
               </p>
               <div className="mt-2 flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Saldo TON:</span>
+                <span className="text-sm text-gray-600">Saldo Total em TON:</span>
                 <span className="font-bold text-blue-600 text-lg">
                   {balances === null ? '...' : (balances['TON']?.toFixed(4) ?? '0.0000')}
                 </span>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, CheckCircle2, Clock, Copy, QrCode } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Clock, Copy } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface QRCodeDisplayProps {
   amount: string;
@@ -8,6 +9,20 @@ interface QRCodeDisplayProps {
   isCompleted: boolean;
   walletAddress?: string;
   onBack: () => void;
+}
+
+// Função para gerar payload PIX simples
+interface PixPayload {
+  chave: string;
+  valor: string | number;
+  nome: string;
+  cidade: string;
+  txid: string;
+}
+function gerarPayloadPix({ chave, valor, nome, cidade, txid }: PixPayload): string {
+  // Para produção, use uma lib de EMV/PIX! Aqui é um exemplo simplificado.
+  const valorStr = Number(valor).toFixed(2).replace('.', '');
+  return `00020126580014br.gov.bcb.pix0136${chave}520400005303986540${valorStr}5802BR5913${nome}6009${cidade}62070503${txid}6304`;
 }
 
 export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
@@ -21,9 +36,12 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
   const [copied, setCopied] = useState(false);
 
-  // Generate a mock PIX key (in real app, this would come from the backend)
+  // Dados da Transfero
   const pixKey = 'ton-gateway@transfero.com.br';
-  // const qrCodeData = `00020126580014br.gov.bcb.pix0136${pixKey}520400005303986540${parseFloat(amount).toFixed(2)}5802BR5913TON Gateway6009Sao Paulo62070503***6304`;
+  const nome = 'Transfero';
+  const cidade = 'Rio deJaneiro';
+  const txid = 'TONGW' + (walletAddress ? walletAddress.slice(-6) : '000000');
+  const payloadPix = gerarPayloadPix({ chave: pixKey, valor: amount || '0.01', nome, cidade, txid });
 
   useEffect(() => {
     if (isWaiting && !isCompleted) {
@@ -122,7 +140,6 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
                 <h2 className="text-2xl font-bold text-gray-800">R$ {amount}</h2>
                 <p className="text-gray-600">Para comprar {token}</p>
               </div>
-
               {/* Timer */}
               <div className="flex items-center justify-center space-x-2">
                 <Clock className="w-5 h-5 text-orange-500" />
@@ -130,31 +147,37 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
                   {formatTime(timeLeft)}
                 </span>
               </div>
-
               <p className="text-sm text-gray-500">
                 Tempo restante para pagamento
               </p>
             </div>
           </div>
 
-          {/* QR Code */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="text-center space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800">Escaneie o QR Code</h3>
-              
-              <div className="flex justify-center">
-                <div className="w-64 h-64 bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-300">
-                  <div className="text-center space-y-2">
-                    <QrCode className="w-16 h-16 text-gray-400 mx-auto" />
-                    <p className="text-sm text-gray-500">QR Code PIX</p>
-                    <p className="text-xs text-gray-400">Simulado para demonstração</p>
-                  </div>
-                </div>
+          {/* QR Code real */}
+          <div className="text-center space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800">Escaneie o QR Code</h3>
+            <div className="flex justify-center">
+              <div className="w-64 h-64 bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-300">
+                <QRCodeSVG
+                  value={payloadPix}
+                  size={220}
+                  imageSettings={{
+                    src: '/assets/application.png', // caminho do seu logo
+                    height: 40,
+                    width: 40,
+                    excavate: true
+                  }}
+                />
               </div>
-
-              <p className="text-sm text-gray-600">
-                Use o app do seu banco para escanear o QR Code
-              </p>
+            </div>
+            <p className="text-sm text-gray-600">
+              Use o app do seu banco para escanear o QR Code
+            </p>
+            <div className="mt-2">
+              <p className="text-xs text-gray-500">Ou copie o código PIX:</p>
+              <div className="bg-gray-50 rounded-xl p-2 text-xs font-mono break-all select-all border border-gray-200">
+                {payloadPix}
+              </div>
             </div>
           </div>
 
