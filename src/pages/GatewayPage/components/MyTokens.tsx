@@ -12,11 +12,31 @@ interface Token {
 
 interface MyTokensProps {
   tokens: Token[];
+  wallet?: any;
 }
 
-export const MyTokens: React.FC<MyTokensProps> = ({ tokens }) => {
+export const MyTokens: React.FC<MyTokensProps> = ({ tokens, wallet }) => {
   const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
   const totalTokens = tokens.reduce((sum, token) => sum + token.amount, 0);
+  const [tonBalance, setTonBalance] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    async function fetchTonBalance(address: string) {
+      try {
+        const res = await fetch(`https://tonapi.io/v1/account/getInfo?account=${address}`);
+        const data = await res.json();
+        const balance = Number(data.balance) / 1e9;
+        setTonBalance(balance.toFixed(3));
+      } catch (e) {
+        setTonBalance(null);
+      }
+    }
+    if (wallet && wallet.account?.address) {
+      fetchTonBalance(wallet.account.address);
+    } else {
+      setTonBalance(null);
+    }
+  }, [wallet]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,6 +66,9 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens }) => {
               <div>
                 <p className="text-sm text-gray-600">Total Investido</p>
                 <p className="text-lg font-bold text-gray-800">R$ {totalValue.toFixed(2)}</p>
+                {tonBalance !== null && (
+                  <span className="block text-xs text-green-700 font-semibold mt-1">Saldo TON: {tonBalance} TON</span>
+                )}
               </div>
             </div>
           </div>
