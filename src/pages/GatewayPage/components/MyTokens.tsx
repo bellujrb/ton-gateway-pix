@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ArrowLeft, Wallet, TrendingUp, Calendar } from 'lucide-react';
 import { useTonTokenBalances } from '../../../hooks/useTonTokenBalances';
+import { useTonTokenPrices } from '../../../hooks/useTonTokenPrices';
 
 interface Token {
   id: string;
@@ -23,7 +24,15 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
     // Adicione outros tokens se necessário
   ], []);
   const balances = useTonTokenBalances(walletAddress, tokenList);
-  const totalValue = tokens.reduce((sum, token) => sum + token.price, 0);
+  const prices = useTonTokenPrices(tokenList.map(t => t.address === null ? 'ton' : t.address));
+  const totalBRL = useMemo(() => {
+    if (!balances || !prices) return 0;
+    return tokenList.reduce((sum, token) => {
+      const amount = balances[token.symbol] || 0;
+      const price = prices[token.address === null ? 'ton' : token.address]?.BRL || 0;
+      return sum + amount * price;
+    }, 0);
+  }, [balances, prices, tokenList]);
   const totalTokens = tokens.reduce((sum, token) => sum + token.amount, 0);
 
   return (
@@ -53,7 +62,7 @@ export const MyTokens: React.FC<MyTokensProps> = ({ tokens, walletAddress }) => 
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Investido</p>
-                <p className="text-lg font-bold text-gray-800">R$ {totalValue.toFixed(2)}</p>
+                <p className="text-lg font-bold text-gray-800">R$ {totalBRL.toFixed(2)}</p>
               </div>
             </div>
           </div>
